@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sản phẩm — Soft & Care</title>
+<meta name="description" content="Toàn bộ sản phẩm Soft & Care, lọc theo danh mục">
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="brand">
+        <img src="assets/logo.png" alt="Soft & Care">
+        <span>Soft &amp; Care</span>
+      </a>
+      <button class="menu-toggle" aria-label="Menu">☰</button>
+      <nav class="nav">
+        <a href="index.html" data-nav="home">Trang chủ</a>
+        <a href="san-pham.html" data-nav="products">Sản phẩm</a>
+        <a href="gio-hang.html" data-nav="cart">Giỏ hàng</a>
+        <a href="thanh-toan.html" data-nav="checkout">Thanh toán</a>
+        <a href="lien-he.html" data-nav="contact">Liên hệ</a>
+      </nav>
+      <a href="gio-hang.html" class="cart-btn">🛒 <span class="badge cart-count">0</span></a>
+    </div>
+  </header>
+  <section class="container">
+    <h1 class="section-title">Tất cả sản phẩm</h1>
+    <p class="section-sub" id="countText"></p>
+    <div class="filter-bar" id="filterBar"></div>
+    <div class="prod-grid" id="prodGrid"></div>
+  </section>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="brand"><img src="assets/logo.png" alt="" style="width:32px;height:32px"><span>Soft &amp; Care</span></div>
+      <p>Cửa hàng chăm sóc cá nhân — dịu nhẹ mỗi ngày.</p>
+      <div class="contact-mini">
+        📞 0983 523 925 &nbsp;·&nbsp; ✉ nghongfuoc@gmail.com &nbsp;·&nbsp; 📍 31 Trường Chinh, P Đông Hưng Thuận, TP.HCM
+      </div>
+      <p style="margin-top:14px;font-size:12px;color:#7a857e">© 2026 Soft &amp; Care. All rights reserved.</p>
+    </div>
+  </footer>
+<script src="js/products.js"></script>
+<script src="js/app.js"></script>
+<script>
+document.querySelector('[data-nav="products"]').classList.add('active');
+const params = new URLSearchParams(location.search);
+let currentCat = params.get('cat') || 'all';
+
+const bar = document.getElementById('filterBar');
+const chips = [{id:'all',name:'Tất cả'}, ...CATEGORIES.map(c=>({id:c.id,name:c.name}))];
+function renderChips(){
+  bar.innerHTML = chips.map(c=>`<button class="chip ${c.id===currentCat?'active':''}" data-id="${c.id}">${c.name}</button>`).join('');
+  bar.querySelectorAll('.chip').forEach(el=>{
+    el.onclick = ()=>{ currentCat = el.dataset.id; history.replaceState(null,'', currentCat==='all'?'san-pham.html':'san-pham.html?cat='+currentCat); renderChips(); renderList(); };
+  });
+}
+function renderList(){
+  const list = currentCat==='all' ? PRODUCTS : PRODUCTS.filter(p=>p.cat===currentCat);
+  document.getElementById('countText').textContent = list.length + ' sản phẩm';
+  document.getElementById('prodGrid').innerHTML = list.length? list.map(productCard).join('') : '<p style="color:#888">Không có sản phẩm nào.</p>';
+}
+renderChips(); renderList();
+</script>
+</body></html>

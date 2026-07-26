@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Soft & Care — Chăm sóc cá nhân dịu nhẹ mỗi ngày</title>
+<meta name="description" content="Soft & Care - cửa hàng sản phẩm chăm sóc cá nhân: sữa tắm, dầu gội, dưỡng thể, chăm sóc răng miệng.">
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="brand">
+        <img src="assets/logo.png" alt="Soft & Care">
+        <span>Soft &amp; Care</span>
+      </a>
+      <button class="menu-toggle" aria-label="Menu">☰</button>
+      <nav class="nav">
+        <a href="index.html" data-nav="home">Trang chủ</a>
+        <a href="san-pham.html" data-nav="products">Sản phẩm</a>
+        <a href="gio-hang.html" data-nav="cart">Giỏ hàng</a>
+        <a href="thanh-toan.html" data-nav="checkout">Thanh toán</a>
+        <a href="lien-he.html" data-nav="contact">Liên hệ</a>
+      </nav>
+      <a href="gio-hang.html" class="cart-btn">🛒 <span class="badge cart-count">0</span></a>
+    </div>
+  </header>
+  <section class="hero">
+    <h1>Chăm sóc bản thân — nhẹ nhàng mỗi ngày</h1>
+    <p>Khám phá bộ sưu tập sản phẩm chăm sóc cá nhân chọn lọc: dịu nhẹ cho da, thơm mát cho tóc, sạch khuẩn cho tay.</p>
+    <a href="san-pham.html" class="btn btn-primary">Mua sắm ngay</a>
+  </section>
+
+  <section class="container">
+    <h2 class="section-title">Danh mục sản phẩm</h2>
+    <p class="section-sub">7 nhóm hàng, hơn 35 sản phẩm chính hãng</p>
+    <div class="cat-grid" id="catGrid"></div>
+  </section>
+
+  <section class="container">
+    <h2 class="section-title">Sản phẩm nổi bật</h2>
+    <p class="section-sub">Được khách hàng yêu thích nhất</p>
+    <div class="prod-grid" id="featured"></div>
+    <div style="text-align:center;margin-top:30px">
+      <a href="san-pham.html" class="btn btn-outline">Xem tất cả sản phẩm →</a>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="brand"><img src="assets/logo.png" alt="" style="width:32px;height:32px"><span>Soft &amp; Care</span></div>
+      <p>Cửa hàng chăm sóc cá nhân — dịu nhẹ mỗi ngày.</p>
+      <div class="contact-mini">
+        📞 0983 523 925 &nbsp;·&nbsp; ✉ nghongfuoc@gmail.com &nbsp;·&nbsp; 📍 31 Trường Chinh, P Đông Hưng Thuận, TP.HCM
+      </div>
+      <p style="margin-top:14px;font-size:12px;color:#7a857e">© 2026 Soft &amp; Care. All rights reserved.</p>
+    </div>
+  </footer>
+<script src="js/products.js"></script>
+<script src="js/app.js"></script>
+<script>
+document.querySelector('[data-nav="home"]').classList.add('active');
+document.getElementById('catGrid').innerHTML = CATEGORIES.map(c=>
+  `<a href="san-pham.html?cat=${c.id}" class="cat-tile"><div class="ic">${c.icon}</div><div class="nm">${c.name}</div></a>`
+).join('');
+const featured = [1,7,11,26,21,31,16,12].map(id=>PRODUCTS.find(p=>p.id===id)).filter(Boolean);
+document.getElementById('featured').innerHTML = featured.map(productCard).join('');
+</script>
+</body></html>

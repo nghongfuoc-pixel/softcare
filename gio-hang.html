@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Giỏ hàng — Soft & Care</title>
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="brand">
+        <img src="assets/logo.png" alt="Soft & Care">
+        <span>Soft &amp; Care</span>
+      </a>
+      <button class="menu-toggle" aria-label="Menu">☰</button>
+      <nav class="nav">
+        <a href="index.html" data-nav="home">Trang chủ</a>
+        <a href="san-pham.html" data-nav="products">Sản phẩm</a>
+        <a href="gio-hang.html" data-nav="cart">Giỏ hàng</a>
+        <a href="thanh-toan.html" data-nav="checkout">Thanh toán</a>
+        <a href="lien-he.html" data-nav="contact">Liên hệ</a>
+      </nav>
+      <a href="gio-hang.html" class="cart-btn">🛒 <span class="badge cart-count">0</span></a>
+    </div>
+  </header>
+  <section class="container">
+    <h1 class="section-title">Giỏ hàng của bạn</h1>
+    <div id="cartArea"></div>
+  </section>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="brand"><img src="assets/logo.png" alt="" style="width:32px;height:32px"><span>Soft &amp; Care</span></div>
+      <p>Cửa hàng chăm sóc cá nhân — dịu nhẹ mỗi ngày.</p>
+      <div class="contact-mini">
+        📞 0983 523 925 &nbsp;·&nbsp; ✉ nghongfuoc@gmail.com &nbsp;·&nbsp; 📍 31 Trường Chinh, P Đông Hưng Thuận, TP.HCM
+      </div>
+      <p style="margin-top:14px;font-size:12px;color:#7a857e">© 2026 Soft &amp; Care. All rights reserved.</p>
+    </div>
+  </footer>
+<script src="js/products.js"></script>
+<script src="js/app.js"></script>
+<script>
+document.querySelector('[data-nav="cart"]').classList.add('active');
+function renderCart(){
+  const cart = getCart();
+  const area = document.getElementById('cartArea');
+  if(!cart.length){
+    area.innerHTML = `<div class="empty"><div class="ic">🛒</div><h3>Giỏ hàng trống</h3><p style="margin:10px 0 20px">Hãy chọn vài sản phẩm dịu nhẹ cho bản thân nhé!</p><a href="san-pham.html" class="btn btn-primary">Xem sản phẩm</a></div>`;
+    return;
+  }
+  const items = cart.map(it=>{
+    const p = PRODUCTS.find(x=>x.id===it.id); if(!p) return '';
+    return `<div class="cart-item">
+      <img src="${imgFor(p)}" alt="">
+      <div class="info">
+        <h4>${p.name}</h4>
+        <div class="p">${fmtVND(p.price)}</div>
+        <div class="qty">
+          <button onclick="updateQty(${p.id},-1)">−</button>
+          <span>${it.qty}</span>
+          <button onclick="updateQty(${p.id},1)">+</button>
+        </div>
+      </div>
+      <button class="remove" onclick="removeFromCart(${p.id})" title="Xóa">×</button>
+    </div>`;
+  }).join('');
+  const total = cartTotal();
+  const count = cartCount();
+  area.innerHTML = `<div class="cart-wrap">
+    <div class="cart-list">${items}</div>
+    <div class="summary">
+      <h3>Tóm tắt đơn hàng</h3>
+      <div class="row"><span>Số sản phẩm</span><span>${count}</span></div>
+      <div class="row"><span>Tạm tính</span><span>${fmtVND(total)}</span></div>
+      <div class="row"><span>Phí vận chuyển</span><span>Miễn phí</span></div>
+      <div class="row total"><span>Tổng cộng</span><span>${fmtVND(total)}</span></div>
+      <a href="thanh-toan.html" class="btn btn-primary btn-block" style="margin-top:16px;text-align:center">Tiến hành thanh toán</a>
+      <a href="san-pham.html" class="btn btn-outline btn-block" style="margin-top:10px;text-align:center">Tiếp tục mua sắm</a>
+    </div>
+  </div>`;
+}
+renderCart();
+</script>
+</body></html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Thanh toán — Soft & Care</title>
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="brand">
+        <img src="assets/logo.png" alt="Soft & Care">
+        <span>Soft &amp; Care</span>
+      </a>
+      <button class="menu-toggle" aria-label="Menu">☰</button>
+      <nav class="nav">
+        <a href="index.html" data-nav="home">Trang chủ</a>
+        <a href="san-pham.html" data-nav="products">Sản phẩm</a>
+        <a href="gio-hang.html" data-nav="cart">Giỏ hàng</a>
+        <a href="thanh-toan.html" data-nav="checkout">Thanh toán</a>
+        <a href="lien-he.html" data-nav="contact">Liên hệ</a>
+      </nav>
+      <a href="gio-hang.html" class="cart-btn">🛒 <span class="badge cart-count">0</span></a>
+    </div>
+  </header>
+  <section class="container">
+    <h1 class="section-title">Thanh toán</h1>
+    <p class="section-sub">Hoàn tất thông tin để chúng tôi giao hàng đến bạn</p>
+    <div class="cart-wrap">
+      <form class="contact-card" id="checkoutForm">
+        <h3 style="margin-bottom:16px;color:var(--green-dark)">Thông tin giao hàng</h3>
+        <div class="form-grid">
+          <div class="form-row">
+            <div><label>Họ và tên *</label><input required name="name" placeholder="Nguyễn Văn A"></div>
+            <div><label>Số điện thoại *</label><input required name="phone" type="tel" placeholder="09xx xxx xxx"></div>
+          </div>
+          <div><label>Email</label><input name="email" type="email" placeholder="ban@email.com"></div>
+          <div><label>Địa chỉ giao hàng *</label><input required name="address" placeholder="Số nhà, đường"></div>
+          <div class="form-row">
+            <div><label>Phường / Xã</label><input name="ward"></div>
+            <div><label>Quận / Huyện</label><input name="district"></div>
+          </div>
+          <div><label>Tỉnh / Thành phố</label><input name="city" value="TP. Hồ Chí Minh"></div>
+          <div><label>Ghi chú</label><textarea name="note" rows="3" placeholder="Lưu ý cho người giao hàng..."></textarea></div>
+
+          <h3 style="margin-top:14px;color:var(--green-dark)">Phương thức thanh toán</h3>
+          <div class="pay-methods" id="payMethods">
+            <label class="pay-opt selected"><input type="radio" name="pay" value="cod" checked><div class="ic">💵</div><div><div style="font-weight:600">Thanh toán khi nhận hàng (COD)</div><div class="desc">Trả tiền mặt khi shipper giao đến</div></div></label>
+            <label class="pay-opt"><input type="radio" name="pay" value="bank"><div class="ic">🏦</div><div><div style="font-weight:600">Chuyển khoản ngân hàng</div><div class="desc">Vietcombank / Techcombank / MB Bank</div></div></label>
+            <label class="pay-opt"><input type="radio" name="pay" value="wallet"><div class="ic">📱</div><div><div style="font-weight:600">Ví điện tử</div><div class="desc">MoMo / ZaloPay / VNPay</div></div></label>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top:14px">Đặt hàng</button>
+        </div>
+      </form>
+
+      <div class="summary">
+        <h3>Đơn hàng</h3>
+        <div id="orderSummary"></div>
+      </div>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="brand"><img src="assets/logo.png" alt="" style="width:32px;height:32px"><span>Soft &amp; Care</span></div>
+      <p>Cửa hàng chăm sóc cá nhân — dịu nhẹ mỗi ngày.</p>
+      <div class="contact-mini">
+        📞 0983 523 925 &nbsp;·&nbsp; ✉ nghongfuoc@gmail.com &nbsp;·&nbsp; 📍 31 Trường Chinh, P Đông Hưng Thuận, TP.HCM
+      </div>
+      <p style="margin-top:14px;font-size:12px;color:#7a857e">© 2026 Soft &amp; Care. All rights reserved.</p>
+    </div>
+  </footer>
+<script src="js/products.js"></script>
+<script src="js/app.js"></script>
+<script>
+document.querySelector('[data-nav="checkout"]').classList.add('active');
+
+const cart = getCart();
+const box = document.getElementById('orderSummary');
+if(!cart.length){
+  box.innerHTML = '<p style="color:#888">Giỏ hàng đang trống. <a href="san-pham.html" style="color:var(--green-dark);text-decoration:underline">Mua sắm</a></p>';
+} else {
+  const rows = cart.map(it=>{
+    const p = PRODUCTS.find(x=>x.id===it.id); if(!p) return '';
+    return `<div class="row"><span style="max-width:70%">${p.name} × ${it.qty}</span><span>${fmtVND(p.price*it.qty)}</span></div>`;
+  }).join('');
+  box.innerHTML = rows + `<div class="row"><span>Vận chuyển</span><span>Miễn phí</span></div><div class="row total"><span>Tổng</span><span>${fmtVND(cartTotal())}</span></div>`;
+}
+
+// Highlight selected payment
+document.querySelectorAll('.pay-opt input').forEach(r=>{
+  r.addEventListener('change', ()=>{
+    document.querySelectorAll('.pay-opt').forEach(o=>o.classList.remove('selected'));
+    r.closest('.pay-opt').classList.add('selected');
+  });
+});
+
+document.getElementById('checkoutForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  if(!getCart().length){ alert('Giỏ hàng đang trống!'); return; }
+  const fd = new FormData(e.target);
+  const payNames = {cod:'Thanh toán khi nhận hàng (COD)', bank:'Chuyển khoản ngân hàng', wallet:'Ví điện tử'};
+  alert('✅ Đặt hàng thành công!\n\nCảm ơn ' + fd.get('name') + '.\nPhương thức: ' + payNames[fd.get('pay')] + '\nTổng: ' + fmtVND(cartTotal()) + '\n\nChúng tôi sẽ liên hệ ' + fd.get('phone') + ' để xác nhận.');
+  saveCart([]);
+  location.href = 'index.html';
+});
+</script>
+</body></html>
