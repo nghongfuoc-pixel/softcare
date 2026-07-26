@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "description": "Static website for SoftCare",
   "scripts": {
-    "start": "npx serve -s . -l $PORT"
+    "start": "npx serve . -l $PORT"
   }
 }
